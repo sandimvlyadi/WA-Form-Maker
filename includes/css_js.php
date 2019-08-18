@@ -88,7 +88,7 @@ if ( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', 'wafm_script' );
 		}
 	}
-} else {
+} else{
 	add_action( 'wp_enqueue_scripts', 'wafm_style_public' );
 	add_action( 'wp_enqueue_scripts', 'wafm_script_public' );
 }

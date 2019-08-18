@@ -74,22 +74,6 @@ function field_generator( $data = array() ) {
 
 	$result .= "<div class='wafm-facebook-pixel'><input type='hidden' name='view_content' value='". $data['view_content'] ."'><input type='hidden' name='add_to_cart' value='". $data['add_to_cart'] ."'><input type='hidden' name='initiate_checkout' value='". $data['initiate_checkout'] ."'><input type='hidden' name='purchase' value='". $data['purchase'] ."'></div>";
 
-	// if ($data['view_content'] == 'yes') {
-	// 	$result .= "<script>fbq('track', 'ViewContent');</script>";
-	// }
-
-	// if ($data['add_to_cart'] == 'yes') {
-	// 	$result .= "<script>fbq('track', 'AddToCart');</script>";
-	// }
-
-	// if ($data['initiate_checkout'] == 'yes') {
-	// 	$result .= "<script>fbq('track', 'InitiateCheckout');</script>";
-	// }
-
-	// if ($data['purchase'] == 'yes') {
-	// 	$result .= "<script>fbq('track', 'Purchase');</script>";
-	// }
-
 	return $result;
 }
 
