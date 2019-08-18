@@ -41,6 +41,18 @@ function wafm_facebook_pixel_page() {
 	));
 }
 
+function wafm_license_page() {
+	wp_register_script( 'wafm_license', plugin_dir_url(WAFM_PLUGIN) . 'admin/js/wafm_license.js' );
+	wp_enqueue_script( 'wafm_license', '', '', '', true );
+	wp_localize_script( 'wafm_license', 'wafm', array(
+	    'siteurl' => get_site_url('/'),
+	    'apiSettings' => array(
+			'root' => esc_url_raw( rest_url( 'wafm/v1' ) ),
+			'namespace' => 'wafm/v1',
+		),
+	));
+}
+
 $page = empty($_GET['page']) ? null : $_GET['page'];
 if ($page != null) {
 	if ($page === 'wafm_form_list') {
@@ -53,5 +65,9 @@ if ($page != null) {
 
 	if ($page === 'wafm_facebook_pixel') {
 		add_action( 'admin_enqueue_scripts', 'wafm_facebook_pixel_page' );
+	}
+
+	if ($page === 'wafm_license') {
+		add_action( 'admin_enqueue_scripts', 'wafm_license_page' );
 	}
 }

@@ -9,7 +9,7 @@ function field_generator( $data = array() ) {
 	$title = $data['title'];
 
 	$result = "<div class='row'><div class='col text-center'><button name='btn_modal' class='btn btn-default btn-lg mb-3' data-toggle='modal' data-target='#wafmModal". $id ."'><i class='fab fa-whatsapp'></i> ". $button ."</button></div></div>";
-	$result .= "<div class='modal fade' id='wafmModal". $id ."' role='dialog' aria-labelledby='wafmTitle". $data['id'] ."' aria-hidden='true'><div class='modal-dialog modal-dialog-centered' role='document'><div class='modal-content'><div class='modal-header text-center d-block'><img src='". plugins_url("/public/images/wa.png", WAFM_PLUGIN) ."' alt='avatar' class='rounded-circle img-responsive'><h5 class='modal-title d-inline-block text-white' id='wafmLongTitle'>". $title ."</h5><button type='button' class='close text-white' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div><div class='modal-body'>";
+	$result .= "<div class='modal fade' id='wafmModal". $id ."' role='dialog' aria-labelledby='wafmTitle". $data['id'] ."' aria-hidden='true'><div class='modal-dialog modal-dialog-centered' role='document'><div class='modal-content'><div class='modal-header text-center d-block'><i class='fab fa-whatsapp text-white fa-2x'></i> <h5 class='modal-title d-inline-block text-white' id='wafmLongTitle'>". $title ."</h5><button type='button' class='close text-white' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div><div class='modal-body'>";
 	$result .= "<form id='wafmData". $id ."'>";
 
 	$fields = $data['fields'];
@@ -72,21 +72,23 @@ function field_generator( $data = array() ) {
 		'purchase' => get_option('wafm_facebook_pixel_purchase')
 	);
 
-	if ($data['view_content'] == 'yes') {
-		$result .= "<script>fbq('track', 'ViewContent');</script>";
-	}
+	$result .= "<div class='wafm-facebook-pixel'><input type='hidden' name='view_content' value='". $data['view_content'] ."'><input type='hidden' name='add_to_cart' value='". $data['add_to_cart'] ."'><input type='hidden' name='initiate_checkout' value='". $data['initiate_checkout'] ."'><input type='hidden' name='purchase' value='". $data['purchase'] ."'></div>";
 
-	if ($data['add_to_cart'] == 'yes') {
-		$result .= "<script>fbq('track', 'AddToCart');</script>";
-	}
+	// if ($data['view_content'] == 'yes') {
+	// 	$result .= "<script>fbq('track', 'ViewContent');</script>";
+	// }
 
-	if ($data['initiate_checkout'] == 'yes') {
-		$result .= "<script>fbq('track', 'InitiateCheckout');</script>";
-	}
+	// if ($data['add_to_cart'] == 'yes') {
+	// 	$result .= "<script>fbq('track', 'AddToCart');</script>";
+	// }
 
-	if ($data['purchase'] == 'yes') {
-		$result .= "<script>fbq('track', 'Purchase');</script>";
-	}
+	// if ($data['initiate_checkout'] == 'yes') {
+	// 	$result .= "<script>fbq('track', 'InitiateCheckout');</script>";
+	// }
+
+	// if ($data['purchase'] == 'yes') {
+	// 	$result .= "<script>fbq('track', 'Purchase');</script>";
+	// }
 
 	return $result;
 }

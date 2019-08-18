@@ -70,7 +70,8 @@ class WafmClass {
 
         $q =    "SELECT 
                     a.`message`,
-                    b.`number`
+                    b.`number`,
+                    a.`group_link`
                 FROM 
                     `wafm_list` a
                 LEFT JOIN
@@ -83,6 +84,8 @@ class WafmClass {
                     a.`deleted_at` IS NULL;";
         $r = $wpdb->get_results( $q );
         $a = '';
+        $f = '';
+        $v = '';
         if (count($r) > 0) {
             $result['result'] = true;
             $msg = $r[0]->message;
@@ -93,6 +96,8 @@ class WafmClass {
                 foreach ($form as $key => $value) {
                     if (strpos($fields[$i]['name'], $key) !== false) {
                         if (strlen($fields[$i]['name']) == strlen($key)) {
+                            $f .= $fields[$i]['name'] . ',';
+                            $v .= empty( $value ) ? $fields[$i]['name'] : $value . ',';
                             $msg = str_replace($fields[$i]['strtoreplace'], empty( $value ) ? $fields[$i]['name'] : $value, $msg);
                         }
                     }
@@ -102,14 +107,29 @@ class WafmClass {
                 foreach ($form as $key => $value) {
                     if (strpos($options[$i]['name'], $key) !== false) {
                         if (strlen($options[$i]['name']) == strlen($key)) {
+                            $f .= $fields[$i]['name'] . ',';
+                            $v .= empty( $value ) ? $fields[$i]['name'] : $value . ',';
                             $msg = str_replace($options[$i]['strtoreplace'], empty( $value ) ? $options[$i]['name'] : $value, $msg);
                         }
                     }
                 }
             }
             $result['target'] = 'https://wa.me/'. $number .'?text='. urlencode($msg);
+            $result['group_link'] = $r[0]->group_link;
         } else{
             $result['msg'] = 'Nothing found.';
+        }
+
+        if (count($r) > 0) {
+            $res = $wpdb->insert(
+                'wafm_list_detail',
+                array(
+                    'created_at' => current_time('mysql', 8),
+                    'wafm_list_id' => $id,
+                    'field' => rtrim($f, ','),
+                    'value' => rtrim($v, ',')
+                )
+            );
         }
 
         return $result;

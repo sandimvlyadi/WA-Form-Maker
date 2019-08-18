@@ -11,33 +11,96 @@ function adminmenu() {
 	);
 }
 
+function checkKeServer( $data = array() )
+{
+	$ch = curl_init();
+	$fields  = array(
+		'key'    	=> $data['key'],
+		'email'    	=> $data['email'],
+		'string'  	=> $_SERVER['HTTP_HOST']
+	);
+
+	curl_setopt($ch, CURLOPT_URL,"https://id.my-aksen.com/check/license");
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($fields));
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+	$response  = curl_exec($ch);
+	curl_close($ch); 
+
+	return json_decode($response);
+}
+
+function checkLicense() {
+	$email = get_option( 'wafm_license_email' );
+	$key = get_option( 'wafm_license_key' );
+	$param = array(
+		'key' 	=> $key,
+		'email' => $email
+	);
+
+	$response = checkKeServer( $param );
+
+	return $response;
+}
+
 function adminsubmenu() {
-	add_submenu_page(
-		'wafm',
-		'Form List',
-		'Form List',
-		'manage_options',
-		'wafm_form_list',
-		'adminsubmenu_form_list_function'
-	);
+	$c = checkLicense();
+	if ( $c->result ) {
+		add_submenu_page(
+			'wafm',
+			'Form List',
+			'Form List',
+			'manage_options',
+			'wafm_form_list',
+			'adminsubmenu_form_list_function'
+		);
 
-	add_submenu_page(
-		'wafm',
-		'Reception Numbers',
-		'Reception Numbers',
-		'manage_options',
-		'wafm_reception_numbers',
-		'adminsubmenu_reception_numbers_function'
-	);
+		add_submenu_page(
+			'wafm',
+			'Reception Numbers',
+			'Reception Numbers',
+			'manage_options',
+			'wafm_reception_numbers',
+			'adminsubmenu_reception_numbers_function'
+		);
 
-	add_submenu_page(
-		'wafm',
-		'Facebook Pixel',
-		'Facebook Pixel',
-		'manage_options',
-		'wafm_facebook_pixel',
-		'adminsubmenu_facebook_pixel_function'
-	);
+		add_submenu_page(
+			'wafm',
+			'Facebook Pixel',
+			'Facebook Pixel',
+			'manage_options',
+			'wafm_facebook_pixel',
+			'adminsubmenu_facebook_pixel_function'
+		);
+
+		// add_submenu_page(
+		// 	'wafm',
+		// 	'Form Detail',
+		// 	'Form Detail',
+		// 	'manage_options',
+		// 	'wafm_form_detail',
+		// 	'adminsubmenu_form_detail_function'
+		// );
+
+		add_submenu_page(
+			'wafm',
+			'License',
+			'License',
+			'manage_options',
+			'wafm_license',
+			'adminsubmenu_license_function'
+		);
+	} else {
+		add_submenu_page(
+			'wafm',
+			'License',
+			'License',
+			'manage_options',
+			'wafm_license',
+			'adminsubmenu_license_function'
+		);
+	}
 }
 
 function adminmenu_function() {
@@ -54,6 +117,14 @@ function adminsubmenu_reception_numbers_function() {
 
 function adminsubmenu_facebook_pixel_function() {
 	require_once WAFM_PLUGIN_DIR . '/admin/facebook_pixel.php';
+}
+
+// function adminsubmenu_form_detail_function() {
+// 	require_once WAFM_PLUGIN_DIR . '/admin/form_detail.php';
+// }
+
+function adminsubmenu_license_function() {
+	require_once WAFM_PLUGIN_DIR . '/admin/license.php';
 }
 
 add_action( 'admin_menu', 'adminmenu' );

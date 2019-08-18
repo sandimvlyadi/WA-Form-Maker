@@ -74,3 +74,9 @@ select.form-control:not([size]):not([multiple]) {
 	padding: 0px;
 	margin: 0px;
 }
+
+#wafmLongTitle {
+	margin-left: 10px;
+	text-transform: none;
+	font-size: 24px;
+}

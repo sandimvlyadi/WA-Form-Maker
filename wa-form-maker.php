@@ -3,8 +3,8 @@
  * Plugin Name: WA Form Maker
  * Plugin URI:  https://waformmaker.com/
  * Description: Just help you to build some form and sent it as WA message.
- * Version:     v1.0.1
- * Author:      Sandi Mulyadi & Adi Sheva
+ * Version:     1.0.0
+ * Author:      Sandi Mulyadi & Ady Sheva
  * Author URI:  https://sandimulyadi.com/
  * License:     GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -25,7 +25,7 @@
  along with WA Form Maker. If not, see https://waformmaker.com/license/.
  */
 
-define( 'WAFM_VERSION', '1.0.1' );
+define( 'WAFM_VERSION', '1.0.0' );
 define( 'WAFM_REQUIRED_WP_VERSION', '4.9' );
 define( 'WAFM_PLUGIN', __FILE__ );
 define( 'WAFM_PLUGIN_BASENAME', plugin_basename( WAFM_PLUGIN ) );
@@ -48,6 +48,7 @@ function create_table() {
 						`modified_by` int(11) DEFAULT NULL,
 						`deleted_by` int(11) DEFAULT NULL,
 						`name` text NOT NULL,
+						`group_link` text NULL,
 						`id_number` int(11) NOT NULL DEFAULT '0',
 						`message` text,
 						`shortcode` text,
@@ -55,6 +56,16 @@ function create_table() {
 						`button_send` varchar(16) NOT NULL DEFAULT 'SEND',
 						PRIMARY KEY (`id`)
 					);";
+
+	$wafm_list_detail = 	"CREATE TABLE `wafm_list_detail` (
+							  `id` int(11) NOT NULL AUTO_INCREMENT,
+							  `created_at` datetime DEFAULT NULL,
+							  `deleted_at` datetime DEFAULT NULL,
+							  `wafm_list_id` int(11) NOT NULL,
+							  `field` text NOT NULL,
+							  `value` text NOT NULL,
+							  PRIMARY KEY (`id`)
+							)";
 
 	$wafm_number =	"CREATE TABLE `wafm_number` (
 						`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -72,11 +83,12 @@ function create_table() {
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $wafm_list );
+	dbDelta( $wafm_list_detail );
 	dbDelta( $wafm_number );
 }
 
 function pluginprefix_activation() {
-	$wafm_db_version = '1.0.1';
+	$wafm_db_version = '1.0.0';
 	$wafm_db_current_version = get_option( 'wafm_db_version' );
 
 	if ($wafm_db_version != $wafm_db_current_version) {
@@ -90,6 +102,9 @@ function pluginprefix_activation() {
 	add_option('wafm_facebook_pixel_add_to_cart', 'no');
 	add_option('wafm_facebook_pixel_initiate_checkout', 'no');
 	add_option('wafm_facebook_pixel_purchase', 'no');
+
+	add_option('wafm_license_email', 'email@domain.com');
+	add_option('wafm_license_key', 'yourkey');
 }
 
 register_activation_hook( __FILE__, 'pluginprefix_activation' );

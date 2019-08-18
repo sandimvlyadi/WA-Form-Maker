@@ -71,14 +71,23 @@ function wafm_script_public() {
 			'root' => esc_url_raw( rest_url( 'wafm/v1' ) ),
 			'namespace' => 'wafm/v1',
 		),
+		'fbPixelViewContent' => plugin_dir_url(WAFM_PLUGIN) . 'public/js/wafm_facebook_pixel_view_content.js',
+		'fbPixelAddToCart' => plugin_dir_url(WAFM_PLUGIN) . 'public/js/wafm_facebook_pixel_add_to_cart.js',
+		'fbPixelInitiateCheckout' => plugin_dir_url(WAFM_PLUGIN) . 'public/js/wafm_facebook_pixel_initiate_checkout.js',
+		'fbPixelPurchase' => plugin_dir_url(WAFM_PLUGIN) . 'public/js/wafm_facebook_pixel_purchase.js',
 	));
 }
 
 // End of JS
 
 if ( is_admin() ) {
-	add_action( 'admin_enqueue_scripts', 'wafm_style' );
-	add_action( 'admin_enqueue_scripts', 'wafm_script' );
+	$page = empty($_GET['page']) ? null : $_GET['page'];
+	if ($page != null) {
+		if (strpos($page, 'wafm') !== false) {
+			add_action( 'admin_enqueue_scripts', 'wafm_style' );
+			add_action( 'admin_enqueue_scripts', 'wafm_script' );
+		}
+	}
 } else {
 	add_action( 'wp_enqueue_scripts', 'wafm_style_public' );
 	add_action( 'wp_enqueue_scripts', 'wafm_script_public' );

@@ -85,6 +85,113 @@ class WafmFormListClass {
         return $result;
 	}
 
+    // end of datatables
+
+    function _getDetail($data = array())
+    {
+        $q = "SELECT * FROM `wafm_list_detail` ";
+
+        if ( $data['search']['value'] && !isset( $data['all'] ) ) {
+            $s = sanitize_text_field( $data['search']['value'] );
+            $q .= "WHERE (`field` LIKE '%". $s ."%' OR `value` LIKE '%". $s ."%') AND `deleted_at` IS NULL AND `wafm_list_id` = '". $data['formId'] ."' ";
+        } else{
+            $q .= "WHERE `deleted_at` IS NULL AND `wafm_list_id` = '". $data['formId'] ."' ";
+        }
+
+        if (isset($data['order'])) {
+            $dir = sanitize_text_field( $data['order'][0]['dir'] );
+            $col = sanitize_text_field( $data['columns'][$data['order'][0]['column']]['data'] );
+            if ( $data['order'][0]['column'] != 0 ) {
+                $q .= "ORDER BY `". $col ."` ". $dir ." ";
+            } else{
+                $q .= "ORDER BY `id` ". $dir ." ";
+            }
+        } else{
+            $q .= "ORDER BY `id` DESC ";
+        }
+
+        return $q;
+    }
+
+    function _listDetail($data = array())
+    {
+        global $wpdb;
+        $q = $this->_getDetail( $data );
+        $q .= "LIMIT ". sanitize_text_field( $data['start'] ) .", ". sanitize_text_field( $data['length'] );
+        $r = $wpdb->get_results( $q );
+
+        return $r;
+    }
+
+    function _filteredDetail($data = array())
+    {
+        global $wpdb;
+        $q = $this->_getDetail( $data );
+        $r = $wpdb->get_results( $q );
+
+        return count( $r );
+    }
+
+    function _allDetail($data = array())
+    {
+        global $wpdb;
+        $data['all'] = true;
+        $q = $this->_getDetail( $data );
+        $r = $wpdb->get_results( $q );
+
+        return count( $r );
+    }
+
+    function details( $data = array() ) {
+        $result = array(
+            'draw'              => 1,
+            'recordsTotal'      => 0,
+            'recordsFiltered'   => 0,
+            'data'              => array(),
+            'result'            => false,
+            'msg'               => ''
+        );
+
+        $list = $this->_listDetail( $data );
+        if ( count( $list ) > 0 ) {
+            $result = array(
+                'draw'              => $data['draw'],
+                'recordsTotal'      => $this->_allDetail( $data ),
+                'recordsFiltered'   => $this->_filteredDetail( $data ),
+                'data'              => $list,
+                'result'            => true,
+                'msg'               => 'Loaded.',
+                'start'             => (int) $data['start'] + 1
+            );
+        } else{
+            $result['msg'] = 'No data left.';
+        }
+
+        return $result;
+    }
+
+    // end of details
+
+    function export( $id = 0 ) {
+        global $wpdb;
+
+        $result = array(
+            'result'    => false,
+            'msg'       => ''
+        );
+
+        $q = "SELECT * FROM `wafm_list_detail` WHERE `wafm_list_id` = '". $id ."' AND `deleted_at` IS NULL;";
+        $r = $wpdb->get_results( $q );
+        if (count($r) > 0) {
+            $result['result'] = true;
+            $result['data'] = $r;
+        } else{
+            $result['msg'] = 'Nothing found.';
+        }
+
+        return $result;
+    }
+
     function save( $data = array() ) {
         global $wpdb;
         $user_id = apply_filters( 'determine_current_user', false );
@@ -103,6 +210,7 @@ class WafmFormListClass {
                     'created_at' => current_time('mysql', 8),
                     'created_by' => get_current_user_id(),
                     'name' => $data['title'],
+                    'group_link' => $data['group_link'],
                     'button_name' => $data['button_name'],
                     'button_send' => $data['button_send'],
                     'id_number' => $data['id_number'],
@@ -129,6 +237,7 @@ class WafmFormListClass {
                     'modified_at' => current_time('mysql', 8),
                     'modified_by' => get_current_user_id(),
                     'name' => $data['title'],
+                    'group_link' => $data['group_link'],
                     'button_name' => $data['button_name'],
                     'button_send' => $data['button_send'],
                     'id_number' => $data['id_number'],

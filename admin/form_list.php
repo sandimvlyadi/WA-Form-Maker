@@ -68,7 +68,27 @@ if ($lang == 'id_ID') {
 						<th>No.</th>
 						<th><?php echo $bhs['form_name']; ?></th>
 						<th>Shortcode</th>
-						<th style="width: 75px;"></th>
+						<th style="width: 175px;"></th>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="col-6 d-flex align-items-center">
+			<!-- <button name="btn_back" class="btn btn-danger btn-sm"><i class="fa fa-chevron-left"></i> Back</button> -->
+		</div>
+		<div class="col-6 d-flex align-items-center">
+			<button id="0" name="btn_export" class="btn btn-success btn-sm ml-auto" disabled><i class="fa fa-file-export"></i> Export</button>
+		</div>
+		<div class="col-12 mt-3">
+			<div class="table-responsive">
+				<table id="detailTable" class="table table-striped table-bordered table-hover table-sm">
+					<thead>
+						<th width="10%">No.</th>
+						<th width="45%">Field</th>
+						<th width="45%">Value</th>
 					</thead>
 					<tbody>
 					</tbody>
@@ -76,6 +96,7 @@ if ($lang == 'id_ID') {
 			</div>
 		</div>
 	</div>
+
 	<div class="row mt-3 card-deck wafm-form-list" style="display: none;">
 		<div class="col-12 card">
 			<div class="form-group">
@@ -83,8 +104,18 @@ if ($lang == 'id_ID') {
 				<input type="text" name="title" placeholder="Form List Title" class="form-control">
 			</div>
 			<div class="form-group">
+				<div class="input-group-inline">
+        	<input type="radio" name="link-type" class="form-control" value="number" checked> WA Number
+        	<input type="radio" name="link-type" class="form-control" value="link"> Redirect Link
+        </div>
+			</div>
+			<div class="form-group">
 				<label><strong><?php echo $bhs['number']; ?>: </strong></label>
 				<select name="id_number" class="form-control" style="width: 100%"></select>
+			</div>
+			<div class="form-group" style="display: none;">
+				<label><strong>Redirect Link: </strong></label>
+				<input type="text" name="group_link" placeholder="Redirect Link" class="form-control">
 			</div>
 			<div class="row">
 				<div class="col-6">

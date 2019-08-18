@@ -5,6 +5,7 @@ require_once WAFM_PLUGIN_DIR . '/includes/model/wafm_reception_numbers.php';
 require_once WAFM_PLUGIN_DIR . '/includes/model/wafm_upload.php';
 require_once WAFM_PLUGIN_DIR . '/includes/model/wafm.php';
 require_once WAFM_PLUGIN_DIR . '/includes/model/wafm_facebook_pixel.php';
+require_once WAFM_PLUGIN_DIR . '/includes/model/wafm_license.php';
 
 add_action( 'rest_api_init', 'routes_init' );
 
@@ -17,6 +18,26 @@ function routes_init() {
 			array(
 				'methods' => WP_REST_Server::READABLE,
 				'callback' => 'wafm_form_list_datatables',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
+		'/wafm_form_list/details',
+		array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => 'wafm_form_list_details',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
+		'/wafm_form_list/export/(?P<id>\d+)',
+		array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => 'wafm_form_list_export',
 			)
 		)
 	);
@@ -130,11 +151,51 @@ function routes_init() {
 			)
 		)
 	);
+
+	register_rest_route( $namespace,
+		'/wafm_license/save',
+		array(
+			array(
+				'methods' => WP_REST_Server::CREATABLE,
+				'callback' => 'wafm_license_save',
+			)
+		)
+	);
 }
 
 function wafm_form_list_datatables( WP_REST_Request $request ) {
 	$c = new WafmFormListClass();
 	$r = $c->datatables( $request );
+	return rest_ensure_response( $r );
+}
+
+function wafm_form_list_details( WP_REST_Request $request ) {
+	$c = new WafmFormListClass();
+	$r = $c->details( $request );
+	return rest_ensure_response( $r );
+}
+
+function wafm_form_list_export( WP_REST_Request $request ) {
+	$id = (int) $request->get_param( 'id' );
+	$c = new WafmFormListClass();
+	$r = $c->export( $id );
+
+	if ($r['result']) {
+		$d = $r['data'];
+		$filename = 'export_' . time() . '.csv';
+
+		$csv = $d[0]->field . "\n";
+		for ($i=0; $i < count($d); $i++) { 
+			$csv .= $d[$i]->value . "\n";
+		}
+
+		header("Content-type: application/vnd.ms-excel");
+		header("Content-disposition: csv" . date("Y-m-d") . ".csv");
+		header("Content-disposition: filename=".$filename);
+		print $csv;
+		exit;
+	}
+
 	return rest_ensure_response( $r );
 }
 
@@ -204,5 +265,11 @@ function wafm_send( WP_REST_Request $request ) {
 function wafm_facebook_pixel_save( WP_REST_Request $request ) {
 	$c = new WafmFacebookPixelClass();
 	$r = $c->save( $request );
+	return rest_ensure_response( $r );
+}
+
+function wafm_license_save( WP_REST_Request $request ) {
+	$c = new WafmLicenseClass();
+	$r = $c->save( $_POST );
 	return rest_ensure_response( $r );
 }
