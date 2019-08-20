@@ -105,6 +105,8 @@ function pluginprefix_activation() {
 
 	add_option('wafm_license_email', 'email@domain.com');
 	add_option('wafm_license_key', 'yourkey');
+
+	add_option('wafm_rotate_id', 1);
 }
 
 register_activation_hook( __FILE__, 'pluginprefix_activation' );

@@ -58,6 +58,30 @@ class WafmClass {
         return $options;
     }
 
+    function warotator() {
+        global $wpdb;
+        $number = '';
+
+        $id = get_option('wafm_rotate_id');
+
+        $q = "SELECT * FROM `wafm_number` WHERE `deleted_at` IS NULL AND `id` >= ". $id .";";
+        $r = $wpdb->get_results( $q );
+        if(count($r) > 0){
+            // $i = rand( 0, count( $r ) - 1 );
+            $number = $r[0]->number;
+
+            if(count($r) > 1){
+                update_option( 'wafm_rotate_id', $r[1]->id );
+            } else{
+                $q = "SELECT MIN(`id`) AS `id` FROM `wafm_number` WHERE `deleted_at` IS NULL;";
+                $r = $wpdb->get_results( $q );
+                update_option( 'wafm_rotate_id', $r[0]->id );
+            }
+        }
+
+        return $number;
+    }
+
     function send( $data = array() ) {
         global $wpdb;
         $result = array(
@@ -71,7 +95,8 @@ class WafmClass {
         $q =    "SELECT 
                     a.`message`,
                     b.`number`,
-                    a.`group_link`
+                    a.`group_link`,
+                    a.`id_number`
                 FROM 
                     `wafm_list` a
                 LEFT JOIN
@@ -89,7 +114,15 @@ class WafmClass {
         if (count($r) > 0) {
             $result['result'] = true;
             $msg = $r[0]->message;
-            $number = $r[0]->number;
+
+            $number = '';
+            if($r[0]->id_number == 0){
+                // wa rotator activated.
+                $number = $this->warotator();
+            } else{
+                $number = $r[0]->number;
+            }
+
             $fields = $this->get_fields( $msg );
             $options = $this->get_options( $msg );
             for ($i=0; $i < count($fields); $i++) { 

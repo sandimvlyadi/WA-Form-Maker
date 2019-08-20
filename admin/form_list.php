@@ -108,6 +108,7 @@ if ($lang == 'id_ID') {
 				<div class="input-group-inline">
         	<input type="radio" name="link-type" class="form-control" value="number" checked> WA Number
         	<input type="radio" name="link-type" class="form-control" value="link"> Redirect Link
+			<input type="radio" name="link-type" class="form-control" value="rotator"> WA Rotator
         </div>
 			</div>
 			<div class="form-group">
