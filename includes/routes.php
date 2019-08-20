@@ -2,6 +2,7 @@
 
 require_once WAFM_PLUGIN_DIR . '/includes/model/wafm_form_list.php';
 require_once WAFM_PLUGIN_DIR . '/includes/model/wafm_reception_numbers.php';
+require_once WAFM_PLUGIN_DIR . '/includes/model/wafm_follow_up.php';
 require_once WAFM_PLUGIN_DIR . '/includes/model/wafm_upload.php';
 require_once WAFM_PLUGIN_DIR . '/includes/model/wafm.php';
 require_once WAFM_PLUGIN_DIR . '/includes/model/wafm_facebook_pixel.php';
@@ -123,11 +124,81 @@ function routes_init() {
 	);
 
 	register_rest_route( $namespace,
+		'/wafm_follow_up/datatables',
+		array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => 'wafm_follow_up_datatables',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
+		'/wafm_follow_up/save',
+		array(
+			array(
+				'methods' => WP_REST_Server::CREATABLE,
+				'callback' => 'wafm_follow_up_save',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
+		'/wafm_follow_up/edit/(?P<id>\d+)',
+		array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => 'wafm_follow_up_edit',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
+		'/wafm_follow_up/delete',
+		array(
+			array(
+				'methods' => WP_REST_Server::CREATABLE,
+				'callback' => 'wafm_follow_up_delete',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
+		'/wafm_wafm_follow_up/select/(?P<id>\d+)',
+		array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => 'wafm_follow_up_select',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
+		'/wafm_follow_up/send',
+		array(
+			array(
+				'methods' => WP_REST_Server::CREATABLE,
+				'callback' => 'wafm_follow_up_send',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
 		'/wafm_upload/image',
 		array(
 			array(
 				'methods' => WP_REST_Server::CREATABLE,
 				'callback' => 'wafm_upload_image',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
+		'/wafm_upload/follow_up_import',
+		array(
+			array(
+				'methods' => WP_REST_Server::CREATABLE,
+				'callback' => 'wafm_upload_follow_up_import',
 			)
 		)
 	);
@@ -250,9 +321,53 @@ function wafm_reception_numbers_select( WP_REST_Request $request ) {
 	return rest_ensure_response( $r );
 }
 
+function wafm_follow_up_datatables( WP_REST_Request $request ) {
+	$c = new WafmFollowUpClass();
+	$r = $c->datatables( $request );
+	return rest_ensure_response( $r );
+}
+
+function wafm_follow_up_save( WP_REST_Request $request ) {
+	$c = new WafmFollowUpClass();
+	$r = $c->save( $request );
+	return rest_ensure_response( $r );
+}
+
+function wafm_follow_up_edit( WP_REST_Request $request ) {
+	$id = (int) $request->get_param( 'id' );
+	$c = new WafmFollowUpClass();
+	$r = $c->edit( $id );
+	return rest_ensure_response( $r );
+}
+
+function wafm_follow_up_delete( WP_REST_Request $request ) {
+	$c = new WafmFollowUpClass();
+	$r = $c->delete( $request );
+	return rest_ensure_response( $r );
+}
+
+function wafm_follow_up_select( WP_REST_Request $request ) {
+	$id = (int) $request->get_param( 'id' );
+	$c = new WafmFollowUpClass();
+	$r = $c->select( $id );
+	return rest_ensure_response( $r );
+}
+
+function wafm_follow_up_send( WP_REST_Request $request ) {
+	$c = new WafmFollowUpClass();
+	$r = $c->send( $request );
+	return rest_ensure_response( $r );
+}
+
 function wafm_upload_image( WP_REST_Request $request ) {
 	$c = new WafmUploadClass();
 	$r = $c->image( $_FILES );
+	return rest_ensure_response( $r );
+}
+
+function wafm_upload_follow_up_import( WP_REST_Request $request ) {
+	$c = new WafmUploadClass();
+	$r = $c->follow_up_import( $_FILES );
 	return rest_ensure_response( $r );
 }
 

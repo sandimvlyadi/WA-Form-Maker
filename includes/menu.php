@@ -67,21 +67,21 @@ function adminsubmenu() {
 
 		add_submenu_page(
 			'wafm',
+			'Follow Up',
+			'Follow Up',
+			'manage_options',
+			'wafm_follow_up',
+			'adminsubmenu_follow_up_function'
+		);
+
+		add_submenu_page(
+			'wafm',
 			'Facebook Pixel',
 			'Facebook Pixel',
 			'manage_options',
 			'wafm_facebook_pixel',
 			'adminsubmenu_facebook_pixel_function'
 		);
-
-		// add_submenu_page(
-		// 	'wafm',
-		// 	'Form Detail',
-		// 	'Form Detail',
-		// 	'manage_options',
-		// 	'wafm_form_detail',
-		// 	'adminsubmenu_form_detail_function'
-		// );
 
 		add_submenu_page(
 			'wafm',
@@ -113,6 +113,10 @@ function adminsubmenu_form_list_function() {
 
 function adminsubmenu_reception_numbers_function() {
 	require_once WAFM_PLUGIN_DIR . '/admin/reception_numbers.php';
+}
+
+function adminsubmenu_follow_up_function() {
+	require_once WAFM_PLUGIN_DIR . '/admin/follow_up.php';
 }
 
 function adminsubmenu_facebook_pixel_function() {

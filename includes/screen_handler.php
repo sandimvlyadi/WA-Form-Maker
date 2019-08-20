@@ -29,6 +29,19 @@ function wafm_reception_numbers_page() {
 	));
 }
 
+function wafm_follow_up_page() {
+	wp_register_script( 'wafm_follow_up', plugin_dir_url(WAFM_PLUGIN) . 'admin/js/wafm_follow_up.js' );
+	wp_enqueue_script( 'wafm_follow_up', '', '', '', true );
+	wp_localize_script( 'wafm_follow_up', 'wafm', array(
+	    'siteurl' => get_site_url('/'),
+	    'apiSettings' => array(
+			'root' => esc_url_raw( rest_url( 'wafm/v1' ) ),
+			'namespace' => 'wafm/v1',
+		),
+		'fileurl' => plugin_dir_url(WAFM_PLUGIN) . 'public/files/',
+	));
+}
+
 function wafm_facebook_pixel_page() {
 	wp_register_script( 'wafm_facebook_pixel', plugin_dir_url(WAFM_PLUGIN) . 'admin/js/wafm_facebook_pixel.js' );
 	wp_enqueue_script( 'wafm_facebook_pixel', '', '', '', true );
@@ -75,6 +88,10 @@ if ($page != null) {
 
 	if ($page === 'wafm_reception_numbers') {
 		add_action( 'admin_enqueue_scripts', 'wafm_reception_numbers_page' );
+	}
+
+	if ($page === 'wafm_follow_up') {
+		add_action( 'admin_enqueue_scripts', 'wafm_follow_up_page' );
 	}
 
 	if ($page === 'wafm_facebook_pixel') {
