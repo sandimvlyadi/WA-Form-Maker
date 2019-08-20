@@ -53,6 +53,20 @@ function wafm_license_page() {
 	));
 }
 
+function dequeue_external_scripts() {
+	global $wp_scripts;
+	$core = array( 'common', 'admin-bar', 'utils', 'svg-painter', 'wp-auth-check', 'bootstrap', 'datatables', 'select2', 'fontawesome', 'notify' );
+	foreach ( $wp_scripts->queue as $script ) {
+		if( in_array( $script, $core ) ){
+			// pass dequeueing script
+		} else{
+			if( strpos( $script, 'wafm' ) === false ){
+				wp_dequeue_script( $script );
+			}
+		}
+	}
+}
+
 $page = empty($_GET['page']) ? null : $_GET['page'];
 if ($page != null) {
 	if ($page === 'wafm_form_list') {

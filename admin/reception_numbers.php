@@ -1,4 +1,5 @@
 <?php
+dequeue_external_scripts();
 
 $bhs = array(
 	'h1' => 'Reception Number',

@@ -1,4 +1,5 @@
 <?php
+dequeue_external_scripts();
 
 $bhs = array(
 	'intro' => 'Activate the Facebook pixel feature from the following list : ',

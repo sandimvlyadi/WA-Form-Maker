@@ -1,8 +1,10 @@
 <?php
-	$data = array(
-		'email' => get_option('wafm_license_email'),
-		'key' 	=> get_option('wafm_license_key')
-	);
+dequeue_external_scripts();
+
+$data = array(
+	'email' => get_option('wafm_license_email'),
+	'key' 	=> get_option('wafm_license_key')
+);
 ?>
 
 <div class="wrap">
