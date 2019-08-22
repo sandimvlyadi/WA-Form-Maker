@@ -116,6 +116,8 @@ function pluginprefix_activation() {
 	add_option('wafm_facebook_pixel_add_to_cart', 'no');
 	add_option('wafm_facebook_pixel_initiate_checkout', 'no');
 	add_option('wafm_facebook_pixel_purchase', 'no');
+	add_option('wafm_facebook_pixel_lead', 'no');
+	add_option('wafm_facebook_pixel_addpaymentinfo', 'no');
 
 	add_option('wafm_license_email', 'email@domain.com');
 	add_option('wafm_license_key', 'yourkey');

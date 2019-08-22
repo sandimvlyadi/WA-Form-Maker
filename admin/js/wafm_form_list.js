@@ -37,7 +37,7 @@ jQuery(function($) {
 	            	var row = new Array();
 	            	if (response.result) {
 	            		for(var x in response.data){
-	                        var button = '<button id="'+ response.data[x].id +'" name="btn_detail" class="btn btn-success btn-sm" title="Detail"><i class="fa fa-file-export"></i> Database</button> <button id="'+ response.data[x].id +'" name="btn_edit" class="btn btn-info btn-sm" title="Edit"><i class="fa fa-edit"></i></button> <button id="'+ response.data[x].id +'" name="btn_delete" class="btn btn-danger btn-sm" title="Delete"><i class="fa fa-trash"></i></button>';
+	                        var button = '<button id="'+ response.data[x].id +'" name="btn_detail" class="btn btn-success btn-sm" title="Detail"><i class="fa fa-file-export"></i> Database</button> <button id="'+ response.data[x].id +'" name="btn_copy" class="btn btn-warning btn-sm text-white" title="Duplicate"><i class="fa fa-copy"></i></button> <button id="'+ response.data[x].id +'" name="btn_edit" class="btn btn-info btn-sm" title="Edit"><i class="fa fa-edit"></i></button> <button id="'+ response.data[x].id +'" name="btn_delete" class="btn btn-danger btn-sm" title="Delete"><i class="fa fa-trash"></i></button>';
 
 		            		row.push({
 		            			'no'			: i,
@@ -503,5 +503,52 @@ jQuery(function($) {
 			$('.wafm-form-list .form-group:eq(3)').fadeOut();
 			$('.wafm-form-list .form-group:eq(4)').fadeOut();
 		}
-	})
+	});
+
+	$('#dataTable').on('click', 'button[name="btn_copy"]', function(){
+		var id = $(this).attr('id');
+
+		$.ajax({
+	        type: 'POST',
+	        url	: wafm.apiSettings.getRoute( '/wafm_form_list/duplicate/' ),
+	        data: {
+	        	'id': id
+	        },
+	        dataType: 'json',
+	        success: function(response){
+	            if(response.result){
+	            	$.notify({
+	                    icon: "fa fa-check",
+	                    message: response.msg
+	                }, {
+	                    type: 'success',
+	                    delay: 2000,
+	                    timer: 500,
+	                    z_index: 99999,
+	                    placement: {
+	                        from: 'bottom',
+	                        align: 'right'
+	                    }
+	                });
+					
+	                table.ajax.reload(null, false);
+	            } else{
+	                $.notify({
+	                    icon: "fa fa-exclamation-triangle",
+	                    message: response.msg
+	                }, {
+	                    type: 'danger',
+	                    delay: 2000,
+	                    timer: 500,
+	                    z_index: 99999,
+	                    placement: {
+	                        from: 'bottom',
+	                        align: 'right'
+	                    }
+	                });
+	            }
+	        }
+	    });
+	});
+
 });

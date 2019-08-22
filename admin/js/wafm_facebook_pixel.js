@@ -18,8 +18,10 @@ jQuery(function($) {
 	        data: {
 	        	'view_content': $('input[name="view_content"]:checked').val() == 'on' ? 'yes' : 'no',
 	        	'add_to_cart': $('input[name="add_to_cart"]:checked').val() == 'on' ? 'yes' : 'no',
-	        	'initiate_checkout': $('input[name="initiate_checkout"]:checked').val() == 'on' ? 'yes' : 'no',
-	        	'purchase': $('input[name="purchase"]:checked').val() == 'on' ? 'yes' : 'no'
+				'initiate_checkout': $('input[name="initiate_checkout"]:checked').val() == 'on' ? 'yes' : 'no',
+				'purchase': $('input[name="pixel_send"]:eq(0):checked').val() == 'on' ? 'yes' : 'no',
+				'lead': $('input[name="pixel_send"]:eq(1):checked').val() == 'on' ? 'yes' : 'no',
+				'addpaymentinfo': $('input[name="pixel_send"]:eq(2):checked').val() == 'on' ? 'yes' : 'no'
 	        },
 	        dataType: 'json',
 	        success: function(response){

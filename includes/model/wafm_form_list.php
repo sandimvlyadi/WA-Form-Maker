@@ -311,6 +311,64 @@ class WafmFormListClass {
         return $result;
     }
 
+    function duplicate( $data = array() ) {
+        global $wpdb;
+        $user_id = apply_filters( 'determine_current_user', false );
+        wp_set_current_user( $user_id );
+
+        $result = array(
+            'result'    => false,
+            'msg'       => ''
+        );
+
+        $id = $data['id'];
+        $q = "SELECT * FROM `wafm_list` WHERE `id` = '". $id ."' AND `deleted_at` IS NULL;";
+        $r = $wpdb->get_results( $q );
+        if(count($r) > 0){
+            $data = array(
+                'title' => $r[0]->name,
+                'group_link' => $r[0]->group_link,
+                'button_name' => $r[0]->button_name,
+                'button_send' => $r[0]->button_send,
+                'id_number' => $r[0]->id_number,
+                'message' => $r[0]->message
+            );
+
+            $res = $wpdb->insert(
+                'wafm_list',
+                array(
+                    'created_at' => current_time('mysql', 8),
+                    'created_by' => get_current_user_id(),
+                    'name' => $data['title'],
+                    'group_link' => $data['group_link'],
+                    'button_name' => $data['button_name'],
+                    'button_send' => $data['button_send'],
+                    'id_number' => $data['id_number'],
+                    'message' => $data['message']
+                )
+            );
+
+            $id = $wpdb->insert_id;
+            $shortcode = '[wafm id="'. $id .'" title="'. $data['title'] .'"]';
+            $res = $wpdb->update(
+                'wafm_list',
+                array(
+                    'shortcode' => $shortcode
+                ),
+                array(
+                    'id' => $id
+                )
+            );
+
+            $result['result'] = true;
+            $result['msg'] = 'Duplicated.';
+        } else{
+            $result['msg'] = 'Data is not found.';
+        }
+
+        return $result;
+    }
+
     function select( $id = 0 ) {
         global $wpdb;
 

@@ -75,6 +75,8 @@ function wafm_script_public() {
 		'fbPixelAddToCart' => plugin_dir_url(WAFM_PLUGIN) . 'public/js/wafm_facebook_pixel_add_to_cart.js',
 		'fbPixelInitiateCheckout' => plugin_dir_url(WAFM_PLUGIN) . 'public/js/wafm_facebook_pixel_initiate_checkout.js',
 		'fbPixelPurchase' => plugin_dir_url(WAFM_PLUGIN) . 'public/js/wafm_facebook_pixel_purchase.js',
+		'fbPixelLead' => plugin_dir_url(WAFM_PLUGIN) . 'public/js/wafm_facebook_pixel_lead.js',
+		'fbPixelAddPaymentInfo' => plugin_dir_url(WAFM_PLUGIN) . 'public/js/wafm_facebook_pixel_add_payment_info.js'
 	));
 }
 

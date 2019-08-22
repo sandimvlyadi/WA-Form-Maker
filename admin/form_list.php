@@ -69,7 +69,7 @@ if ($lang == 'id_ID') {
 						<th>No.</th>
 						<th><?php echo $bhs['form_name']; ?></th>
 						<th>Shortcode</th>
-						<th style="width: 175px;"></th>
+						<th style="width: 200px;"></th>
 					</thead>
 					<tbody>
 					</tbody>

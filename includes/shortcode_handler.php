@@ -69,10 +69,12 @@ function field_generator( $data = array() ) {
 		'view_content' => get_option('wafm_facebook_pixel_view_content'),
 		'add_to_cart' => get_option('wafm_facebook_pixel_add_to_cart'),
 		'initiate_checkout' => get_option('wafm_facebook_pixel_initiate_checkout'),
-		'purchase' => get_option('wafm_facebook_pixel_purchase')
+		'purchase' => get_option('wafm_facebook_pixel_purchase'),
+		'lead' => get_option('wafm_facebook_pixel_lead'),
+		'addpaymentinfo' => get_option('wafm_facebook_pixel_addpaymentinfo')
 	);
 
-	$result .= "<div class='wafm-facebook-pixel'><input type='hidden' name='view_content' value='". $data['view_content'] ."'><input type='hidden' name='add_to_cart' value='". $data['add_to_cart'] ."'><input type='hidden' name='initiate_checkout' value='". $data['initiate_checkout'] ."'><input type='hidden' name='purchase' value='". $data['purchase'] ."'></div>";
+	$result .= "<div class='wafm-facebook-pixel'><input type='hidden' name='view_content' value='". $data['view_content'] ."'><input type='hidden' name='add_to_cart' value='". $data['add_to_cart'] ."'><input type='hidden' name='initiate_checkout' value='". $data['initiate_checkout'] ."'><input type='hidden' name='purchase' value='". $data['purchase'] ."'><input type='hidden' name='lead' value='". $data['lead'] ."'><input type='hidden' name='addpaymentinfo' value='". $data['addpaymentinfo'] ."'></div>";
 
 	return $result;
 }

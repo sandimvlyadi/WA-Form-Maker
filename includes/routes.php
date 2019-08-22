@@ -74,6 +74,16 @@ function routes_init() {
 	);
 
 	register_rest_route( $namespace,
+		'/wafm_form_list/duplicate',
+		array(
+			array(
+				'methods' => WP_REST_Server::CREATABLE,
+				'callback' => 'wafm_form_list_duplicate',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
 		'/wafm_reception_numbers/datatables',
 		array(
 			array(
@@ -286,6 +296,12 @@ function wafm_form_list_edit( WP_REST_Request $request ) {
 function wafm_form_list_delete( WP_REST_Request $request ) {
 	$c = new WafmFormListClass();
 	$r = $c->delete( $request );
+	return rest_ensure_response( $r );
+}
+
+function wafm_form_list_duplicate( WP_REST_Request $request ) {
+	$c = new WafmFormListClass();
+	$r = $c->duplicate( $request );
 	return rest_ensure_response( $r );
 }
 

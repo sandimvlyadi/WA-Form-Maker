@@ -24,7 +24,6 @@ jQuery(function($) {
         var viewContent = $('input[name="view_content"]').val();
         var addToCart = $('input[name="add_to_cart"]').val();
         var initiateCheckout = $('input[name="initiate_checkout"]').val();
-        var purchase = $('input[name="purchase"]').val();
 
         if (typeof fbq !== 'undefined') {
             if (viewContent == 'yes') {
@@ -47,14 +46,6 @@ jQuery(function($) {
                 var script = $('script[name="initiate_checkout"]');
                 if (script.length === 0) {
                     var s = $('<script name="initiate_checkout" type="text/javascript" src="'+ wafm.fbPixelInitiateCheckout +'"></script>');
-                    $('.wafm-facebook-pixel').append(s);
-                }
-            }
-
-            if (purchase == 'yes') {
-                var script = $('script[name="purchase"]');
-                if (script.length === 0) {
-                    var s = $('<script name="purchase" type="text/javascript" src="'+ wafm.fbPixelPurchase +'"></script>');
                     $('.wafm-facebook-pixel').append(s);
                 }
             }
@@ -93,6 +84,36 @@ jQuery(function($) {
         $(this).removeAttr('disabled');
         if(missing){
             return;
+        }
+
+        var purchase = $('input[name="purchase"]').val();
+        var lead = $('input[name="lead"]').val();
+        var addpaymentinfo = $('input[name="addpaymentinfo"]').val();
+
+        if (typeof fbq !== 'undefined') {
+            if(purchase == 'yes'){
+                var script = $('script[name="purchase"]');
+                if (script.length === 0) {
+                    var s = $('<script name="purchase" type="text/javascript" src="'+ wafm.fbPixelPurchase +'"></script>');
+                    $('.wafm-facebook-pixel').append(s);
+                }
+            }
+
+            if(lead == 'yes'){
+                var script = $('script[name="lead"]');
+                if (script.length === 0) {
+                    var s = $('<script name="lead" type="text/javascript" src="'+ wafm.fbPixelLead +'"></script>');
+                    $('.wafm-facebook-pixel').append(s);
+                }
+            }
+
+            if(addpaymentinfo == 'yes'){
+                var script = $('script[name="addpaymentinfo"]');
+                if (script.length === 0) {
+                    var s = $('<script name="addpaymentinfo" type="text/javascript" src="'+ wafm.fbPixelAddPaymentInfo +'"></script>');
+                    $('.wafm-facebook-pixel').append(s);
+                }
+            }
         }
 
         $.ajax({
