@@ -194,6 +194,16 @@ function routes_init() {
 	);
 
 	register_rest_route( $namespace,
+		'/wafm_follow_up/clear',
+		array(
+			array(
+				'methods' => WP_REST_Server::CREATABLE,
+				'callback' => 'wafm_follow_up_clear',
+			)
+		)
+	);
+
+	register_rest_route( $namespace,
 		'/wafm_upload/image',
 		array(
 			array(
@@ -372,6 +382,12 @@ function wafm_follow_up_select( WP_REST_Request $request ) {
 function wafm_follow_up_send( WP_REST_Request $request ) {
 	$c = new WafmFollowUpClass();
 	$r = $c->send( $request );
+	return rest_ensure_response( $r );
+}
+
+function wafm_follow_up_clear( WP_REST_Request $request ) {
+	$c = new WafmFollowUpClass();
+	$r = $c->clear( $request );
 	return rest_ensure_response( $r );
 }
 

@@ -239,4 +239,26 @@ class WafmFollowUpClass {
         return $result;
     }
 
+    function clear( $data = array() ) {
+        global $wpdb;
+        $user_id = apply_filters( 'determine_current_user', false );
+        wp_set_current_user( $user_id );
+
+        $result = array(
+            'result'    => false,
+            'msg'       => ''
+        );
+
+        $delete = $wpdb->query("TRUNCATE TABLE `wafm_follow_up_number`;");
+
+        if (!$delete) {
+            $result['msg'] = 'Something wrong while deleting your data.';
+        } else{
+            $result['result'] = true;
+            $result['msg'] = 'Deleted.';
+        }
+
+        return $result;
+    }
+
 }

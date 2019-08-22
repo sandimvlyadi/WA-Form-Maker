@@ -41,8 +41,9 @@ if ($lang == 'id_ID') {
 		<div class="col-6">
 			<div class="float-right">
       <button name="btn_add" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#btnAddNumberModal"><i class="fa fa-plus"></i> <?php echo $bhs['add_new']; ?></button>
-        <input type="file" name="file_import" style="display: none;" accept=".csv">
-			  <button name="btn_import" class="btn btn-success btn-sm"><i class="fa fa-file-import"></i> Import</button>
+      <input type="file" name="file_import" style="display: none;" accept=".csv">
+      <button name="btn_import" class="btn btn-success btn-sm"><i class="fa fa-file-import"></i> Import</button>
+      <button name="btn_clear" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Clear List</button>
 			</div>
 		</div>
     <div class="col-12">
