@@ -15,7 +15,7 @@ class WafmLicenseClass {
             'string'    => $_SERVER['HTTP_HOST']
         );
 
-        curl_setopt($ch, CURLOPT_URL,"https://id.my-aksen.com/check/license");
+        curl_setopt($ch, CURLOPT_URL,"https://link.aksendigital.id/check/license");
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($fields));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
